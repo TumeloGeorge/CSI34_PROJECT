@@ -1,0 +1,221 @@
+
+
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Student Records Portal API",
+      "description": "This is anAPI for managing student admissions",
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "https://api.universityofbotswana.bw.ac.bw/v1",
+        "description":"Production server"
+      }
+    ],
+    "paths": {
+      "/programs": {
+        "get": {
+          "summary": "Retrieve available programs and their capacities",
+          "responses": {
+            "200": {
+              "description": "List of programs with available spaces",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "programId": {
+                          "type": "string"
+                        },
+                        "programName": {
+                          "type": "string"
+                        },
+                        "availableSlots": { 
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/check-qualification": {
+        "post": {
+          "summary": "Check if a student is qualified for program",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "programId": {
+                      "type": "string"
+                    },
+                    "qualifications":{
+                        "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Qualification status",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "isQualified": {
+                        "type": "boolean"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/check-availability": {
+        "post": {
+          "summary": "Check if a chosen and qualified for course has available space",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "programId": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Availability status",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "available": {
+                        "type": "boolean"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/admit-student": {
+        "post": {
+          "summary": "Admit a student and generate an admission letter",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "studentName": {
+                      "type": "string"
+                    },
+                    "studentEmail": {
+                      "type": "string"
+                    },
+                    "confirmedProgramId": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Student admitted successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "studentId": {
+                        "type": "string"
+                      },
+                      "admissionLetterUrl": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/student/{id}": {
+        "get": {
+          "summary": "Retrieve student details",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Student details",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "studentId": {
+                        "type": "string"
+                      },
+                      "studentName": {
+                        "type": "string"
+                      },
+                      "programName": {
+                        "type": "string"
+                      },
+                      "admissionDate": {
+                        "type": "string",
+                        "format": "date"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
